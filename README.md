@@ -1,5 +1,6 @@
 # NovaQ
 Global Quantum Industry Challenge 
+https://www.pqic.org/challenge-about
 
 # NeuroQuantum Nexus– Global Industry Challenge 2025
 Life Sciences: Use quantum and hybrid computing to analyze brain activity data, uncovering new insights beyond traditional methods
