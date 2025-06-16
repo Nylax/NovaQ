@@ -12,3 +12,7 @@ Neurosfit API https://neurosift.app/settings
 https://github.com/flatironinstitute/neurosift
 
 SpikeInterfacve API https://spikeinterface.readthedocs.io/en/latest/api.html
+
+
+Loading the data with Pynwb
+https://pynwb.readthedocs.io/en/stable/tutorials/domain/ecephys.html#sphx-glr-tutorials-domain-ecephys-py
