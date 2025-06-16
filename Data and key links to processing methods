@@ -5,6 +5,18 @@ https://dandiarchive.org/dandiset/000034/0.211030.0713/files?location=sub-P29-16
 
 https://spikeinterface.readthedocs.io/en/latest/
 
+Install the packages
+
+https://spikeinterface.readthedocs.io/en/stable/get_started/installation.html
+https://pynwb.readthedocs.io/en/stable/install_users.html#install-release-from-pypi
+also isntall qiskit and pennylane if you don't already have it
+
+Loading the data with Pynwb
+https://pynwb.readthedocs.io/en/stable/tutorials/domain/ecephys.html#sphx-glr-tutorials-domain-ecephys-py
+
+
+
+Options for data access via API
 Access the data 
 https://github.com/neurodatawithoutborders/lindi
 
@@ -12,7 +24,3 @@ Neurosfit API https://neurosift.app/settings
 https://github.com/flatironinstitute/neurosift
 
 SpikeInterfacve API https://spikeinterface.readthedocs.io/en/latest/api.html
-
-
-Loading the data with Pynwb
-https://pynwb.readthedocs.io/en/stable/tutorials/domain/ecephys.html#sphx-glr-tutorials-domain-ecephys-py
