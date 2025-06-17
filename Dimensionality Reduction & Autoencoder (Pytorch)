@@ -1,0 +1,42 @@
+# This is a draft autoencoder based on our number of channels (it also contains an dencoder, if needed)
+# basic PyTorch autoencoder architecture to compress 384-channel spike windows into a 16-dimensional feature vector
+
+# Input shape: [batch_size, 384, T] where T is the number of time bins (e.g. 100 for 100 ms @ 1 ms resolution)
+# Output: ~16-dimensional latent embeddings per time bin. The idea is to use the z output as the compressed feature vector for each input segment and feed it into your quantum circuit or QGNN.
+
+import torch
+import torch.nn as nn
+
+class SpikeAutoencoder(nn.Module):
+    def __init__(self, input_channels=384, embedding_dim=16):
+        super(SpikeAutoencoder, self).__init__()
+
+        # Encoder
+        self.encoder = nn.Sequential(
+            nn.Conv1d(input_channels, 128, kernel_size=3, padding=1),  # [B, 128, T]
+            nn.ReLU(),
+            nn.MaxPool1d(kernel_size=2),                               # [B, 128, T/2]
+            nn.Conv1d(128, 64, kernel_size=3, padding=1),              # [B, 64, T/2]
+            nn.ReLU(),
+            nn.AdaptiveAvgPool1d(1),                                   # [B, 64, 1]
+            nn.Flatten(),                                              # [B, 64]
+            nn.Linear(64, embedding_dim)                               # [B, 16]
+        )
+
+        # Decoder (optional)
+        self.decoder = nn.Sequential(
+            nn.Linear(embedding_dim, 64),
+            nn.Unflatten(1, (64, 1)),
+            nn.ConvTranspose1d(64, 128, kernel_size=3, padding=1),     # [B, 128, 1]
+            nn.ReLU(),
+            nn.Upsample(scale_factor=2),
+            nn.ConvTranspose1d(128, input_channels, kernel_size=3, padding=1),  # [B, 384, T]
+            nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        z = self.encoder(x)
+        x_recon = self.decoder(z)
+        return x_recon, z
+
+
