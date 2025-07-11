@@ -88,6 +88,6 @@ Phase 3: Pattern Detection & Quantum Insight
 In this final phase, you will execute your full quantum or hybrid pipeline and analyze its effectiveness in detecting high-order patterns in neural spike data. Emphasis will be placed on neuroscientific relevance, model performance compared to classical baselines, and the broader potential for neurotechnology applications. More details to come for teams downselected to the final in Phase 3. Refer to the FAQs in the Event Overview for more information about team formation, submission, and more.
 Download NeuroQuantum Nexus Challenge Document: NeuroQuantum Nexus - Challenge.pdf
 
-[<img src="https://qbraid-static.s3.amazonaws.com/logos/Launch_on_qBraid_white.png" width="150">](https://account.qbraid.com?gitHubUrl=<YOUR GIT .git LINK>)
+[<img src="https://qbraid-static.s3.amazonaws.com/logos/Launch_on_qBraid_white.png" width="150">](https://account.qbraid.com?gitHubUrl=<https://github.com/Nylax/NovaQ>)
 
 
