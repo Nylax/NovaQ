@@ -1,0 +1,72 @@
+#Loading sub-P29-16-05-14-retina02-left_ecephys.nwb from https://dandiarchive.org/dandiset/000034/0.211030.0713/files?location=sub-P29-16-05-14-retina02-left&page=1
+
+import spikeinterface.extractors as se
+import spikeinterface.preprocessing as spre
+import numpy as np
+import os
+
+# ---- File setup ----
+nwb_path = r"C:\Users\synap\Downloads\sub_P29_16_05_14_retina02_left_ecephys.nwb"
+assert os.path.exists(nwb_path), f"NWB file not found: {nwb_path}"
+
+# ---- Load raw ecephys data from NWB ----
+print("Loading NWB file...")
+recording = se.read_nwb_recording(nwb_path)
+
+# Optional: restrict to a time segment (e.g., first 60 seconds)
+recording = recording.frame_slice(
+    start_frame=0,
+    end_frame=int(recording.get_sampling_frequency() * 60)
+)
+
+# ---- Preprocess: bandpass filter and global reference ----
+print("Preprocessing recording...")
+recording = spre.bandpass_filter(recording, freq_min=300, freq_max=6000)
+recording = spre.common_reference(recording, reference='global')
+
+# ---- Bin the spikes into 1 ms windows ----
+print("Binning into 1 ms time windows...")
+fs = recording.get_sampling_frequency()
+duration_sec = recording.get_num_frames() / fs
+bin_size_ms = 1
+bin_size_samples = int(fs * (bin_size_ms / 1000))
+num_bins = int(duration_sec * 1000)
+
+# Get traces: shape (time, channels)
+print("Extracting traces...")
+traces = recording.get_traces().T  # (time, channels)
+
+# Threshold spike detection
+threshold = 5 * np.std(traces)
+binary_spikes = (traces > threshold).astype(int)
+
+# Bin spikes by 1 ms
+print("Creating binned spike matrix...")
+binned_spikes = np.array([
+    np.max(binary_spikes[i:i+bin_size_samples], axis=0)
+    for i in range(0, binary_spikes.shape[0], bin_size_samples)
+])  # shape: (bins, channels)
+
+# Transpose and expand: shape (1, channels, time)
+binned_spikes = binned_spikes.T  # (channels, time)
+binned_spikes = np.expand_dims(binned_spikes, axis=0)  # (1, channels, time)
+
+# ---- Save for training ----
+output_path = "binned_spike_tensor.npy"
+np.save(output_path, binned_spikes)
+
+print(f"\n✅ Binned spike tensor saved to: {output_path}")
+print(f"Shape: {binned_spikes.shape} — [batch, channels, time]")
+
+Output 
+21m 12.8s
+
+
+Loading NWB file...
+Preprocessing recording...
+Binning into 1 ms time windows...
+Extracting traces...
+Creating binned spike matrix...
+
+✅ Binned spike tensor saved to: binned_spike_tensor.npy
+Shape: (1, 1391945, 45) — [batch, channels, time]
